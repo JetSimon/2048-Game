@@ -14,8 +14,8 @@
 
 
     <div id="app" class="pt-32 flex w-2/3 mx-auto items-center">
-        <div class="grid gap-5 grid-cols-4 grid-rows-2" v-for="n in 8" :key="n">
-            <image-picker :id=n*2></image-picker>
+        <div class="grid gap-5 grid-cols-4 grid-rows-2" v-for="n in 10" :key="n">
+            <image-picker :id=2**n></image-picker>
         </div>
     </div>
 

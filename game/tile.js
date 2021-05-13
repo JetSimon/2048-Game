@@ -36,24 +36,23 @@ class Tile {
     
 
     tick() {
-        if (this.destX != null) {
-            this.x = lerp(this.x, this.destX, 0.1)
-        }
+        if (this.destX != null && this.destY != null) {
+          this.x = lerp(this.x, this.destX, 0.1)
+          this.y = lerp(this.y, this.destY, 0.1)
 
-        if (this.destY != null) {
-            this.y = lerp(this.y, this.destY, 0.1)
-        }
+          let canBecome = Math.abs(this.x - this.destX) + Math.abs(this.y - this.destY) < 0.1
 
-        let canBecome = Math.abs(this.x - this.destX) + Math.abs(this.y - this.destY) < 0.1
-
-        if (canBecome) {
-            this.x = this.destX
-            this.y = this.destY
-            this.destX = null
-            this.destY = null
-            //console.log("CALL ME BACK")
-            this.callback()
-        }
+          if (this.destX != null && this.destY != null && canBecome) {
+              this.x = this.destX
+              this.y = this.destY
+              this.destX = null
+              this.destY = null
+              //console.log("CALL ME BACK")
+              if (this.callback) {
+                this.callback()
+              }
+          }
+      }
     }
 
     render(canvas, ctx, gridSize) {
@@ -81,5 +80,9 @@ class Tile {
     canCombineWith(tile)
     {
         return this.val == tile.val
+    }
+
+    toString() {
+      return this.val
     }
 }

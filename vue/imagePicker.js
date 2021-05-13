@@ -3,7 +3,7 @@ Vue.component('image-picker', {
     props: ['id'],
     data: function () {
       return {
-        image:null, image_url:`http://placekitten.com/g/300/${300 + this.id}`
+        image:null, image_url:`http://placekitten.com/g/300/300`
       }
     },
     template: `

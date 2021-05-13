@@ -7,10 +7,12 @@ class Game {
         this.grid = []
         this.previousGrid = []
         this.imageDict = {}
+        this.ghosts = []
 
-        for(let i = 2; i <= 2*8; i*=2)
+        for(let i = 1; i <= 10; i++)
         {
-            this.imageDict[i.toString()] = document.getElementById(i.toString())
+            const key = 2**i;
+            this.imageDict[key.toString()] = document.getElementById(key.toString())
         }
 
         for(let y = 0; y < gridSize; y++) {
@@ -29,6 +31,7 @@ class Game {
     
     tick () {
       this.grid.forEach(arr => arr.filter(tile => tile).forEach(tile => tile.tick()))
+      this.ghosts.forEach(tile => tile.tick())
     }
 
     render () {
@@ -42,7 +45,11 @@ class Game {
                 }
             }
         }
-    }
+
+        for (let i in this.ghosts) {
+          this.ghosts[i].render(this.canvas, this.ctx, this.grid.length)
+        }
+     }
 
     shiftHorizontal(value, y, delta) {
       let newValue = value;
@@ -77,8 +84,7 @@ class Game {
     }
 
     shift(dX, dY, merge) {
-      this.previousGrid = this.grid.map(arr => arr.slice())
-      
+      let refresh = true
       let total = 0
       let counter = 0
       for (let aY = 0; aY < this.grid.length; aY++) {
@@ -103,22 +109,36 @@ class Game {
             this.grid[newY][newX] = this.grid[y][x]
             this.grid[y][x] = null
 
+            refresh = false
+
             total++
 
             this.grid[newY][newX].setDest(newX, newY, () => {
               counter++
-              console.log(counter, total)
-              if (counter == total && merge) {
-                this.merge(dX, dY)
-             }
+              if (counter === total) {
+                if (merge) {
+                  console.log('global merge attempt')
+                  this.merge(dX, dY)
+                }
+                this.addTile()
+              }
             })
+          
           }
+        }
+      }
+
+      if (refresh) {
+        if (merge) {
+          this.merge(dX, dY)
+          this.addTile()
         }
       }
     }
 
     merge(dX, dY) {
       let counter = 0
+      let total = 0
       for (let aY = 0; aY < this.grid.length; aY++) {
         for (let aX = 0; aX < this.grid.length; aX++) {
           let y = aY;
@@ -140,17 +160,28 @@ class Game {
           let current = this.grid[y][x]
           let next = this.grid[newY][newX]
 
-          if (next && current.val == next.val) {
+          if (next && current.val === next.val) {
+            total++
+
+            this.ghosts.push(current)
+
             current.setDest(newX, newY, () => {
-              this.grid[newY][newX].val *= 2
-              this.grid[newY][newX].updateImage(this.imageDict)
-              this.grid[y][x] = null
+              this.ghosts.splice(this.ghosts.indexOf(current), 1);
+              next.val *= 2
+              next.updateImage(this.imageDict)
+              this.shift(dX, dY, false)
             })
+
+            this.grid[y][x] = null
           }
         }
       }
+    }
 
-      this.shift(dX, dY, false)
+    addTile() {
+      if(addNewTile(this.grid, this.imageDict) === false) {
+        console.log("lose game")
+      }
     }
 
     processInput(key) {
@@ -168,10 +199,6 @@ class Game {
           this.shift(1,0,true)
         default:
           return
-      }
-
-      if(addNewTile(this.grid, this.imageDict) === false) {
-          console.log("lose game")
       }
     }
 }

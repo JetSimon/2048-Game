@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>2048</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  
+  <body class="bg-gray-100">
+    <!-- include scripts -->
+    <div class="my-5 text-center mx-auto "><h1 class="text-5xl">2048</h1></div>
+    
+    <canvas class="mx-auto" id="canvas" width="500" height="500"></canvas>
+
+
+    <div id="app" class="pt-32 flex w-2/3 mx-auto items-center">
+        <div class="grid gap-5 grid-cols-4 grid-rows-2" v-for="n in 8" :key="n">
+            <image-picker :id=n*2></image-picker>
+        </div>
+    </div>
+
+    <script src="vue/imagePicker.js"></script>
+    <script src="game/utils.js"></script>
+    <script src="game/tile.js"></script>
+    <script src="game/game.js"></script>
+    <script src="game/container.js"></script>
+    <script src="bootstrap.js"></script>
+  </body>
+</html>

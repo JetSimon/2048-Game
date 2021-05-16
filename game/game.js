@@ -1,4 +1,4 @@
-const TILE_ANIMATION_DELAY = 2000
+const TILE_ANIMATION_DELAY = 150
 class Game {
 
     constructor(name, gameContainer, gridSize) {
@@ -48,7 +48,7 @@ class Game {
             toUpdate.push({x, y, tile})
 
             if (tile.queuedVal > 0) {
-              tile.val = tile.queuedVal
+              tile.change(tile.queuedVal)
               tile.queuedVal = 0
 
               tile.updateImage(this.imageDict)
@@ -108,6 +108,7 @@ class Game {
             if (canCombineWith(tile, adjacent)) {
               // now we will attempt merge
               adjacent.queuedVal = adjacent.val * 2
+              adjacent.queuedRef = tile
               tile.merged = true
               tile.move(destX + dX, destY + dY, TILE_ANIMATION_DELAY)
               cloned[posY][posX] = null

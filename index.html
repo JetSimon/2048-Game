@@ -6,18 +6,24 @@
     <link rel="stylesheet" href="css/styles.css">
   </head>
   
-  <body class="bg-gray-100">
+  <body class="bg-gradient-to-t from-purple-900 to-gray-900">
     <!-- include scripts -->
-    <div class="my-5 text-center mx-auto "><h1 class="text-5xl">2048</h1></div>
+    <div class="mt-5 text-center mx-auto "><h1 class="font-bold tracking-widest text-8xl text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-red-600">2048</h1></div>
+    <div class="mb-5 text-center mx-auto "><h1 class="tracking-widest italic font-semibold text-gray-100 text-2xl">endgame</h1></div>
     
-    <canvas class="mx-auto" id="canvas" width="500" height="500"></canvas>
+    <div class="mt-12 bg-gradient-to-t from-gray-300 to-gray-100 mx-auto py-16 w-1/2 bg-white shadow-lg rounded-xl">
+      <canvas class="mx-auto" id="canvas" width="500" height="500"></canvas>
+    </div>
 
+    <p class="mx-auto font-semibold tracking-wide text-center mt-36 text-5xl text-white">customize your tiles<br><br>∴</p>
 
-    <div id="app" class="pt-32 flex w-2/3 mx-auto items-center">
-        <div class="grid gap-5 grid-cols-4 grid-rows-2" v-for="n in 10" :key="n">
+    <div id="app" class="pt-16 flex w-2/3 mx-auto items-center grid gap-5 grid-cols-4 grid-rows-3">
+        <div class="" v-for="n in 10" :key="n">
             <image-picker :id=2**n></image-picker>
         </div>
     </div>
+
+    <p class="text-white text-center mx-auto font-semibold tracking-widest my-10">BY JET AND ALEX</p>
 
     <script src="vue/imagePicker.js"></script>
     <script src="game/utils.js"></script>

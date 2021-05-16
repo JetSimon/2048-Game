@@ -50,6 +50,8 @@ class Game {
             if (tile.queuedVal > 0) {
               tile.val = tile.queuedVal
               tile.queuedVal = 0
+
+              tile.updateImage(this.imageDict)
             }
           }
         }

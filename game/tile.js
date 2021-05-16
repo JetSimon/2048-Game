@@ -46,20 +46,24 @@ class Tile {
 
     isFinishedMoving() {
       if (this.isMoving) {
-        return isClose(this.destX, this.x, 0.1) && isClose(this.destY, this.y, 0.1)
+        return isClose(this.x, this.destX, 0.05) && isClose(this.y, this.destY, 0.05)
       }
 
-      return null
+      const {destX, destY, speed, x, y, movementStart} = {...this}
+      const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
+      const percentageComplete = (100/speed*timeDiff)/100
+
+      return percentageComplete == 1
     }
     
     tick() {
         if (this.isMoving()) {
-          let {destX, destY, speed, x, y, movementStart} = {...this}
-          let timeDiff = Math.min(speed, new Date().getTime() - movementStart)
-          let percentageComplete = (100/speed*timeDiff)/100 // number w/ range 0 -> 1 which shows how far anim should be
-
-          this.x = lerp(x, destX, percentageComplete)
-          this.y = lerp(y, destY, percentageComplete)
+          const {destX, destY, speed, x, y, movementStart} = {...this}
+          const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
+          const percentageComplete = (100/speed*timeDiff)/100 // number w/ range 0 -> 1 which shows how far anim should be
+          
+          this.x = x - (x - destX)*percentageComplete
+          this.y = y - (y - destY)*percentageComplete
         }
     }
 

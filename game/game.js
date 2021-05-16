@@ -1,4 +1,6 @@
+const TILE_ANIMATION_DELAY = 2000
 class Game {
+
     constructor(name, gameContainer, gridSize) {
         this.name = name
         this.gameContainer = gameContainer
@@ -8,6 +10,7 @@ class Game {
         this.previousGrid = []
         this.imageDict = {}
         this.ghosts = []
+        this.locked = false
 
         for(let i = 1; i <= 10; i++)
         {
@@ -43,6 +46,11 @@ class Game {
             tile.stop()
             tile.setPos(destX, destY)
             toUpdate.push({x, y, tile})
+
+            if (tile.queuedVal > 0) {
+              tile.val = tile.queuedVal
+              tile.queuedVal = 0
+            }
           }
         }
       }
@@ -50,21 +58,17 @@ class Game {
       toUpdate.forEach(update => {
         const { x, y, tile } = update
         this.grid[y][x] = null
-        this.grid[tile.y][tile.x] = tile
+
+        if (!tile.merged) {
+          this.grid[tile.y][tile.x] = tile 
+        }
       })
     }
 
     render () {
         drawGridLines(this.ctx, this.grid)
 
-        for (let y = 0; y < this.grid.length; y++) {
-            for (let x = 0; x < this.grid.length; x++) {
-                const tile = this.grid[y][x]
-                if (tile) {
-                    tile.render(this.canvas, this.ctx, this.grid.length)
-                }
-            }
-        }
+        this.grid.flat().filter(tile => tile).sort((a, b) => a.merged - b.merged).forEach(tile => tile.render(this.canvas, this.ctx, this.grid.length))
      }
 
     shift(dX, dY) {
@@ -72,12 +76,12 @@ class Game {
 
       for (let y = 0; y < this.grid.length; y++) {
         for (let x = 0; x < this.grid.length; x++) {
-          let [posX, posY] = [x, dY > 0 ? this.grid.length - 1 - y : y]
+          let [posX, posY] = [dX > 0 ? this.grid.length - 1 - x: x , dY > 0 ? this.grid.length - 1 - y : y]
 
           let tile = this.grid[posY][posX]
           if (!tile) continue
 
-          let [destX, destY] = [x, posY]
+          let [destX, destY] = [posX, posY]
           
           if (dX !== 0) {
             while (destX + dX >= 0 && destX + dX < this.grid.length && cloned[y][destX + dX] === null) {
@@ -91,26 +95,46 @@ class Game {
             }
           }
 
+          // if this is true, that means the shift couldnt make it all the way to the edge
+          // and was obstructed by another tile
+          if ((dX !== 0 && destX + dX >= 0 && destX + dX < this.grid.length) || (dY !== 0 && destY + dY >= 0 && destY + dY < this.grid.length)) {
+            // now we will check if the adjacent tile has the same value
+            const adjacent = cloned[destY + dY][destX + dX]
+
+            if (adjacent.val === tile.val && !tile.merged && !tile.queuedVal && !adjacent.queuedVal && !adjacent.merged) {
+              // now we will attempt merge
+              adjacent.queuedVal = adjacent.val * 2
+              tile.merged = true
+              tile.move(destX + dX, destY + dY, TILE_ANIMATION_DELAY)
+              cloned[posY][posX] = null
+              continue
+            }
+          }
+          
           //if (destX != x || destY != y) {
-            tile.move(destX, destY, 100)
-            cloned[y][x] = null
+            tile.move(destX, destY, TILE_ANIMATION_DELAY)
+            cloned[posY][posX] = null
             cloned[destY][destX] = tile
           //}
         }
       }
-    }
 
-    merge(dX, dY) {
-      
+      this.locked = true
+      setTimeout(() => this.addTile(), 300)
     }
 
     addTile() {
+      this.locked = false
       if(addNewTile(this.grid, this.imageDict) === false) {
         console.log("lose game")
       }
     }
 
     processInput(key) {
+      if (this.locked || this.grid.flat().filter(tile => tile && tile.isMoving() && !tile.isFinishedMoving()).length > 0) {
+        return
+      }
+
       switch (key) {
         case "arrowdown":
           this.shift(0,1)

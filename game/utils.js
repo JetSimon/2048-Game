@@ -73,6 +73,13 @@ function lerp (start, end, amt){
     return (1-amt)*start+amt*end
 }
 
+function isClose(one, two, radius) {
+  max = Math.abs(Math.max(one, two))
+  min = Math.abs(Math.min(one, two))
+
+  return max - min <= radius
+}
+
 function addNewTile(grid, imageDict) {
     let [y, x] = findClearSpot(grid)
 

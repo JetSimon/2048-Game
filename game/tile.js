@@ -16,7 +16,6 @@ class Tile {
         this.y = null
         this.destX = null
         this.destY = null
-        this.callback = null;
     }
 
     updateImage(imageDict) {
@@ -28,31 +27,40 @@ class Tile {
         this.y = y
     }
 
-    setDest(x, y, callback) {
+    move(x, y, speed) {
+      console.log("moving", this.val, x, y)
         this.destX = x;
         this.destY = y;
-        this.callback = callback;
+        this.speed = speed;
+        this.movementStart = new Date().getTime()
+    }
+
+    isMoving() {
+      return this.destX != null && this.destY != null
+    }
+
+    stop() {
+      this.destX = null
+      this.destY = null
+    }
+
+    isFinishedMoving() {
+      if (this.isMoving) {
+        return isClose(this.destX, this.x, 0.1) && isClose(this.destY, this.y, 0.1)
+      }
+
+      return null
     }
     
-
     tick() {
-        if (this.destX != null && this.destY != null) {
-          this.x = lerp(this.x, this.destX, 0.1)
-          this.y = lerp(this.y, this.destY, 0.1)
+        if (this.isMoving()) {
+          let {destX, destY, speed, x, y, movementStart} = {...this}
+          let timeDiff = Math.min(speed, new Date().getTime() - movementStart)
+          let percentageComplete = (100/speed*timeDiff)/100 // number w/ range 0 -> 1 which shows how far anim should be
 
-          let canBecome = Math.abs(this.x - this.destX) + Math.abs(this.y - this.destY) < 0.1
-
-          if (this.destX != null && this.destY != null && canBecome) {
-              this.x = this.destX
-              this.y = this.destY
-              this.destX = null
-              this.destY = null
-              //console.log("CALL ME BACK")
-              if (this.callback) {
-                this.callback()
-              }
-          }
-      }
+          this.x = lerp(x, destX, percentageComplete)
+          this.y = lerp(y, destY, percentageComplete)
+        }
     }
 
     render(canvas, ctx, gridSize) {

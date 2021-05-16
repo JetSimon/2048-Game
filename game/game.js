@@ -57,7 +57,9 @@ class Game {
 
       toUpdate.forEach(update => {
         const { x, y, tile } = update
-        this.grid[y][x] = null
+        if (this.grid[y][x] === tile) {
+          this.grid[y][x] = null
+        }
 
         if (!tile.merged) {
           this.grid[tile.y][tile.x] = tile 

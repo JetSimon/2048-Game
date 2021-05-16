@@ -1,5 +1,7 @@
 const TILE_SPACING = 0.95
 const WHITESPACE = 1 - TILE_SPACING
+const INITIAL_SIZE = 0.5;
+
 
 class Tile {
     
@@ -16,6 +18,8 @@ class Tile {
         this.y = null
         this.destX = null
         this.destY = null
+
+        this.sizeMul = INITIAL_SIZE;
     }
 
     updateImage(imageDict) {
@@ -72,21 +76,28 @@ class Tile {
             this.sideLength = canvas.width / gridSize
         }
 
-        const sideLength = this.sideLength
+        this.sizeMul = Math.min(1, this.sizeMul)
+        if(this.sizeMul < 1) {
+          this.sizeMul += 0.1;
+        }
 
-        let x = this.x * sideLength + sideLength * WHITESPACE / 2 
-        let y = this.y * sideLength + sideLength * WHITESPACE / 2
+        const sideLength = this.sideLength;
+        const spacing = (sideLength * WHITESPACE / 2) + (sideLength - this.sizeMul * sideLength) / 2
+
+        let x = this.x * sideLength + spacing
+        let y = this.y * sideLength + spacing
 
         ctx.drawImage(this.image,
             this.image.width/2,this.image.height/2,
             sideLength, sideLength,   
             x, y,     // Place the result at 0, 0 in the canvas,
-            sideLength * TILE_SPACING, sideLength * TILE_SPACING); // With as width / height: 100 * 100 (scale)
+            sideLength * TILE_SPACING * this.sizeMul, sideLength * TILE_SPACING * this.sizeMul); // With as width / height: 100 * 100 (scale)
 
         ctx.font = `${sideLength * 0.5}px monospace`
         ctx.fillStyle = `white`
         ctx.textAlign = "center"
-        ctx.fillText(this.val.toString(), x + sideLength/2, y  + sideLength/1.75)
+
+        if(this.sizeMul >= 1) ctx.fillText(this.val.toString(), x + sideLength/2, y  + sideLength/1.75)
     }
 
     canCombineWith(tile)

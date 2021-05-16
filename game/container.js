@@ -50,7 +50,7 @@ class GameContainer {
           }*/
   
           this.tick()
-        }, 5000/(300*this.speed))
+        }, 1000/(300*this.speed))
       })
     }
   

@@ -22,7 +22,7 @@ function drawGridLines(ctx, grid) {
             let xPos = x * sideLength
             
             ctx.beginPath()
-            ctx.fillStyle = isDark ? 'lightgrey' : 'grey'
+            ctx.fillStyle = isDark ? 'lightgray' : 'aliceblue'
             isDark = !isDark
             ctx.rect(xPos, yPos, sideLength, sideLength)
             ctx.fill()
@@ -30,7 +30,8 @@ function drawGridLines(ctx, grid) {
         }
     }
 
-    for (let y = 0; y < grid.length+1; y++) {   
+    //Commented this out because no lines looks cleaner, but keeping squares. Should update function name :s
+    /*for (let y = 0; y < grid.length+1; y++) {   
         let pos = y * ((canvas.width / grid.length))
         ctx.beginPath();
         ctx.moveTo(pos, 0);
@@ -44,7 +45,7 @@ function drawGridLines(ctx, grid) {
         ctx.moveTo(0,pos);
         ctx.lineTo(canvas.height, pos);
         ctx.stroke();     
-    }
+    }*/
 }
 
 function findClearSpot(grid) {

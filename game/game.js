@@ -12,7 +12,7 @@ class Game {
         this.ghosts = []
         this.locked = false
 
-        for(let i = 1; i <= 10; i++)
+        for(let i = 1; i <= 12; i++)
         {
             const key = 2**i;
             this.imageDict[key.toString()] = document.getElementById(key.toString())

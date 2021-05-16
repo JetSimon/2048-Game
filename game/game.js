@@ -103,7 +103,7 @@ class Game {
             // now we will check if the adjacent tile has the same value
             const adjacent = cloned[destY + dY][destX + dX]
 
-            if (adjacent.val === tile.val && !tile.merged && !tile.queuedVal && !adjacent.queuedVal && !adjacent.merged) {
+            if (canCombineWith(tile, adjacent)) {
               // now we will attempt merge
               adjacent.queuedVal = adjacent.val * 2
               tile.merged = true

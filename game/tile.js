@@ -100,11 +100,6 @@ class Tile {
         if(this.sizeMul >= 1) ctx.fillText(this.val.toString(), x + sideLength/2, y  + sideLength/1.75)
     }
 
-    canCombineWith(tile)
-    {
-        return this.val == tile.val
-    }
-
     toString() {
       return this.val
     }

@@ -120,7 +120,7 @@ class Game {
       }
 
       this.locked = true
-      setTimeout(() => this.addTile(), 300)
+      setTimeout(() => this.addTile(), 250)
     }
 
     addTile() {

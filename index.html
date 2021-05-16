@@ -8,14 +8,14 @@
   
   <body class="bg-gradient-to-t from-purple-900 to-gray-900">
     <!-- include scripts -->
-    <div class="mt-5 text-center mx-auto "><h1 class="font-bold tracking-widest text-8xl text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-red-600">2048</h1></div>
-    <div class="mb-5 text-center mx-auto "><h1 class="tracking-widest italic font-semibold text-gray-100 text-2xl">endgame</h1></div>
+    <div class="mt-5 text-center mx-auto "><h1 class="select-none font-bold tracking-widest text-8xl text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-red-600">2048</h1></div>
+    <div class="mb-5 text-center mx-auto "><h1 class="select-none tracking-widest italic font-semibold text-gray-100 text-2xl">endgame</h1></div>
     
     <div class="mt-12  bg-opacity-30 bg-black mx-auto py-16 w-1/2 shadow-lg rounded-xl">
       <canvas class="mx-auto rounded-sm" id="canvas" width="500" height="500"></canvas>
     </div>
 
-    <p class="mx-auto font-semibold tracking-wide text-center mt-36 text-5xl text-white">customize your tiles<br><br>∴</p>
+    <p class="select-none mx-auto font-semibold tracking-wide text-center mt-36 text-5xl text-white">customize your tiles<br><br>∴</p>
 
     <div id="app" class="pt-16 flex w-2/3 mx-auto items-center grid gap-5 grid-cols-4 grid-rows-3">
         <div class="" v-for="n in 10" :key="n">
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <p class="text-white text-center mx-auto font-semibold tracking-widest my-10">BY JET AND ALEX</p>
+    <p class="text-xl text-white text-center mx-auto font-semibold tracking-widest my-10">BY <a class="hover:text-yellow-400" href="http://jetsimon.com/">JET</a> AND <a class="hover:text-yellow-400" href="https://bizar.re/">ALEX</a></p>
 
     <script src="vue/imagePicker.js"></script>
     <script src="game/utils.js"></script>

@@ -12,11 +12,7 @@ class Game {
         this.ghosts = []
         this.locked = false
 
-        for(let i = 1; i <= 12; i++)
-        {
-            const key = 2**i;
-            this.imageDict[key.toString()] = document.getElementById(key.toString())
-        }
+        this.updateImageDict()
 
         for(let y = 0; y < gridSize; y++) {
             this.grid.push([])
@@ -154,6 +150,14 @@ class Game {
           this.shift(1,0)
         default:
           return
+      }
+    }
+
+    updateImageDict() {
+      for(let i = 1; i <= 12; i++)
+      {
+            const key = 2**i;
+            this.imageDict[key.toString()] = document.getElementById(key.toString())
       }
     }
 }

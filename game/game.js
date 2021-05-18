@@ -12,6 +12,7 @@ class Game {
         this.ghosts = []
         this.locked = false
         this.score = 0
+        this.gridSize = gridSize //Replace this once we allow user to enter custom grid size
 
         this.updateImageDict()
 
@@ -27,6 +28,28 @@ class Game {
             const tile = this.grid[y][x] = new Tile(this.imageDict)
             tile.setPos(x, y)
         }
+    }
+
+    reset () {
+      const gridSize = this.gridSize
+      this.grid = []
+      this.previousGrid = []
+      this.ghosts = []
+      this.score = 0
+
+      for(let y = 0; y < gridSize; y++) {
+        this.grid.push([])
+        for(let x = 0; x < gridSize; x++) {
+            this.grid[y].push(null)
+        }
+      }
+
+      for(let i = 0; i < 2; i++) {
+        let [y, x] = findClearSpot(this.grid)
+        const tile = this.grid[y][x] = new Tile(this.imageDict)
+        tile.setPos(x, y)
+      }
+
     }
     
     tick () {

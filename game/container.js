@@ -8,6 +8,7 @@ class GameContainer {
       this.debug = debug
       this.game = new Game("game", this, 4)
       document.body.addEventListener('click', this.game.updateImageDict(), true); 
+      document.getElementById("restart").addEventListener('click', () => {this.game.reset()}); 
     }
 
     async start () {

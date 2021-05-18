@@ -4,6 +4,39 @@
     <title>2048</title>
     <script src="https://unpkg.com/vue"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+      #change {
+        transform: translateX(-50%);
+        left: 50%;
+        display: block;
+        text-align: center;
+        opacity: 0;
+      }
+
+      @keyframes pop {
+        0% {
+          bottom: -50%;
+          top: 0;
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+          bottom: -50%;
+          top: 0;
+        }
+        100% {
+          top: -50%;
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+
+      #change.popped {
+        animation-name: pop;
+        animation-duration: 0.75s;
+      }
+
+    </style>
   </head>
   
   <body class="bg-gradient-to-t from-purple-900 to-gray-900">
@@ -17,11 +50,14 @@
       <div class="flex flex-wrap mt-5">
         <div class="text-center px-8 py-4 rounded-md ml-5 flex-1 bg-opacity-30 bg-black">
           <label class="text-white text-lg font-medium uppercase opacity-50">Score</label>
-          <summary id="score" class="text-2xl font-bold text-white">0</summary>
+          <div class="relative">
+            <summary id="score" class="text-2xl font-bold text-white">0</summary>
+            <span id="change" class="transform invis text-gray-200 absolute font-bold text-xl popped">+0</span>
+          </div>
         </div>
         <div class="text-center px-8 py-4 rounded-md ml-5 flex-1 bg-opacity-30 bg-black">
           <label class="text-white text-lg font-medium uppercase opacity-50">Best</label>
-          <summary id="score" class="text-2xl font-bold text-white">0</summary>
+          <summary id="best" class="text-2xl font-bold text-white">0</summary>
         </div>
         <div class="w-full mt-5 ml-5 flex justify-end">
           <button class="px-8 py-2 rounded-lg bg-opacity-20 bg-black text-gray-300 font-medium">Restart</button>

@@ -1,4 +1,4 @@
-const TILE_ANIMATION_DELAY = 2000
+const TILE_ANIMATION_DELAY = 150
 class Game {
 
     constructor(name, gameContainer, gridSize) {
@@ -12,7 +12,11 @@ class Game {
         this.ghosts = []
         this.locked = false
 
-        this.updateImageDict()
+        for(let i = 1; i <= 12; i++)
+        {
+            const key = 2**i;
+            this.imageDict[key.toString()] = document.getElementById(key.toString())
+        }
 
         for(let y = 0; y < gridSize; y++) {
             this.grid.push([])
@@ -44,7 +48,7 @@ class Game {
             toUpdate.push({x, y, tile})
 
             if (tile.queuedVal > 0) {
-              tile.val = tile.queuedVal
+              tile.change(tile.queuedVal)
               tile.queuedVal = 0
 
               tile.updateImage(this.imageDict)
@@ -104,6 +108,7 @@ class Game {
             if (canCombineWith(tile, adjacent)) {
               // now we will attempt merge
               adjacent.queuedVal = adjacent.val * 2
+              adjacent.queuedRef = tile
               tile.merged = true
               tile.move(destX + dX, destY + dY, TILE_ANIMATION_DELAY)
               cloned[posY][posX] = null
@@ -151,12 +156,4 @@ class Game {
           return
       }
     }
-  
-    updateImageDict() {
-      for(let i = 1; i <= 10; i++)
-      {
-          const key = 2**i;
-          this.imageDict[key.toString()] = document.getElementById(key.toString())
-      }
-    }  
 }

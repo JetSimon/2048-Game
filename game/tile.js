@@ -93,9 +93,9 @@ class Tile {
         let y = this.y * sideLength + spacing
 
         ctx.drawImage(this.image,
-            this.image.width/2,this.image.height/2,
-            sideLength, sideLength,   
-            x, y,     // Place the result at 0, 0 in the canvas,
+            0,0,
+            this.image.width, this.image.height,   
+            x, y,     // Place the result at x,y in the canvas,
             sideLength * TILE_SPACING * this.sizeMul, sideLength * TILE_SPACING * this.sizeMul); // With as width / height: 100 * 100 (scale)
 
         ctx.font = `${sideLength * 0.5}px monospace`

@@ -1,6 +1,7 @@
 const TILE_SPACING = 0.95
 const WHITESPACE = 1 - TILE_SPACING
 const INITIAL_SIZE = 0.5;
+const POP_DURATION = 100
 
 
 class Tile {
@@ -29,6 +30,8 @@ class Tile {
     setPos(x, y) {
         this.x = x
         this.y = y
+        this.originX = x
+        this.originY = y
     }
 
     move(x, y, speed) {
@@ -48,12 +51,13 @@ class Tile {
       this.destY = null
     }
 
-    isFinishedMoving() {
-      if (this.isMoving) {
-        return isClose(this.x, this.destX, 0.05) && isClose(this.y, this.destY, 0.05)
-      }
+    change(val) {
+      this.val = val
+      this.sizeMul = 0.5
+    }
 
-      const {destX, destY, speed, x, y, movementStart} = {...this}
+    isFinishedMoving() {
+      const {speed, movementStart} = {...this}
       const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
       const percentageComplete = (100/speed*timeDiff)/100
 
@@ -62,12 +66,12 @@ class Tile {
     
     tick() {
         if (this.isMoving()) {
-          const {destX, destY, speed, x, y, movementStart} = {...this}
+          const {destX, destY, speed, x, y, originX, originY, movementStart} = {...this}
           const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
           const percentageComplete = (100/speed*timeDiff)/100 // number w/ range 0 -> 1 which shows how far anim should be
-          
-          this.x = x - (x - destX)*percentageComplete
-          this.y = y - (y - destY)*percentageComplete
+
+          this.x = originX - (originX - destX)*percentageComplete
+          this.y = originY - (originY - destY)*percentageComplete
         }
     }
 
@@ -80,6 +84,7 @@ class Tile {
         if(this.sizeMul < 1) {
           this.sizeMul += 0.1;
         }
+        this.sizeMul = Math.min(1, this.sizeMul)
 
         const sideLength = this.sideLength;
         const spacing = (sideLength * WHITESPACE / 2) + (sideLength - this.sizeMul * sideLength) / 2
@@ -88,21 +93,16 @@ class Tile {
         let y = this.y * sideLength + spacing
 
         ctx.drawImage(this.image,
-            this.image.width/2,this.image.height/2,
-            sideLength, sideLength,   
-            x, y,     // Place the result at 0, 0 in the canvas,
+            0,0,
+            this.image.width, this.image.height,   
+            x, y,     // Place the result at x,y in the canvas,
             sideLength * TILE_SPACING * this.sizeMul, sideLength * TILE_SPACING * this.sizeMul); // With as width / height: 100 * 100 (scale)
 
         ctx.font = `${sideLength * 0.5}px monospace`
         ctx.fillStyle = `white`
         ctx.textAlign = "center"
 
-        if(this.sizeMul >= 1) ctx.fillText(this.val.toString(), x + sideLength/2, y  + sideLength/1.75)
-    }
-
-    canCombineWith(tile)
-    {
-        return this.val == tile.val
+        if(this.sizeMul >= 1) ctx.fillText(this.val, x + sideLength/2, y  + sideLength/1.75)
     }
 
     toString() {

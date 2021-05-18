@@ -70,6 +70,10 @@ function findClearSpot(grid) {
     }
 }
 
+function canCombineWith(tile, adjacent) {
+    return adjacent.val === tile.val && !tile.merged && !tile.queuedVal && !adjacent.queuedVal && !adjacent.merged
+}
+
 function lerp (start, end, amt){
     return (1-amt)*start+amt*end
 }

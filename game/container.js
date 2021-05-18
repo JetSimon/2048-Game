@@ -7,6 +7,7 @@ class GameContainer {
       this.speed = speed
       this.debug = debug
       this.game = new Game("game", this, 4)
+      document.body.addEventListener('click', this.game.updateImageDict(), true); 
     }
 
     async start () {

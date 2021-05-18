@@ -11,6 +11,7 @@ class Game {
         this.imageDict = {}
         this.ghosts = []
         this.locked = false
+        this.score = 0
 
         this.updateImageDict()
 
@@ -31,6 +32,7 @@ class Game {
     tick () {
       this.grid.forEach(arr => arr.filter(tile => tile).forEach(tile => tile.tick()))
       const toUpdate = []
+      let score = 0
       for (let y = 0; y < this.grid.length; y++) {
         for (let x = 0; x < this.grid.length; x++) {
           const tile = this.grid[y][x]
@@ -46,6 +48,8 @@ class Game {
             if (tile.queuedVal > 0) {
               tile.change(tile.queuedVal)
               tile.queuedVal = 0
+
+              score += tile.val
 
               tile.updateImage(this.imageDict)
             }
@@ -63,6 +67,17 @@ class Game {
           this.grid[tile.y][tile.x] = tile 
         }
       })
+
+      if (score > 0) {
+        this.score += score
+
+        document.getElementById('score').innerText = this.score
+        const change = document.getElementById('change');
+        change.innerText = `+${score}`
+        change.classList.remove('popped')
+        void change.offsetWidth
+        change.classList.add('popped')
+      }
     }
 
     render () {

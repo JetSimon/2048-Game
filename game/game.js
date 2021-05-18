@@ -36,6 +36,7 @@ class Game {
       this.previousGrid = []
       this.ghosts = []
       this.score = 0
+      document.getElementById('score').innerText = this.score
 
       for(let y = 0; y < gridSize; y++) {
         this.grid.push([])

@@ -72,7 +72,7 @@
 
     <p class="select-none mx-auto font-semibold tracking-wide text-center mt-36 text-5xl text-white">customize your tiles<br><br>∴</p>
 
-    <div id="app" class="pt-16 flex w-2/3 mx-auto items-center grid gap-5 grid-cols-4 grid-rows-3">
+    <div id="app" class="pt-16 flex w-2/3 mx-auto items-center grid gap-5 grid-cols-2 lg:grid-cols-4 grid-rows-auto">
         <div class="" v-for="n in 12" :key="n">
             <image-picker :id=2**n></image-picker>
         </div>

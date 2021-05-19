@@ -9,8 +9,14 @@ class GameContainer {
       this.game = new Game("game", this, 4)
       this.touchX = null
       this.touchY = null
-      document.body.addEventListener('click', this.game.updateImageDict(), true); 
+
       document.getElementById("restart").addEventListener('click', () => {this.game.reset()}); 
+
+
+      const buttons = document.getElementsByClassName("tileImage");
+      for(var i=0; i < buttons.length; i++) {
+          buttons[i].addEventListener('change',  this.game.updateImageDict(), true); 
+      }
     }
 
     async start () {

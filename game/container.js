@@ -13,9 +13,9 @@ class GameContainer {
       document.getElementById("restart").addEventListener('click', () => {this.game.reset()}); 
 
 
-      const buttons = document.getElementsByClassName("tileImage");
-      for(var i=0; i < buttons.length; i++) {
-          buttons[i].addEventListener('change',  this.game.updateImageDict(), true); 
+      const tileImages = document.getElementsByClassName("tileImage");
+      for(var i=0; i < tileImages.length; i++) {
+        tileImages[i].addEventListener('change',  this.game.updateImageDict(), true); 
       }
     }
 

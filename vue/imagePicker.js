@@ -3,13 +3,18 @@ Vue.component('image-picker', {
     props: ['id'],
     data: function () {
       return {
-        image:null, image_url:`http://placekitten.com/g/300/${300 + this.id}`
+        image:null, image_url:`https://picsum.photos/300/${(Math.round(300 + Math.random() * 10)).toString()}`,
       }
     },
     template: `
-      <div>
-        <img :id=id :src=image_url>
-        <button class="text-center text-xs text-gray-600 hover:text-blue-400 btn btn-info" @click="pickFile">select image for {{id}}</button>
+      <div class="transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 shadow-lg w-40 my-5">
+        <div class="w-40 h-40 relative">
+          <img class="tileImage object-cover w-40 h-40 rounded-t-sm" :id=id :src=image_url>
+          <p class="no-select py-1 px-2 bg-black bg-opacity-30 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl text-center font-bold text-white">{{id}}</p>
+        </div>
+        
+        <button id="fileButton" class="rounded-b-sm w-40 bg-gray-300 hover:bg-gray-200 py-2 px-3 text-center text-xs font-semibold text-gray-800 hover:text-blue-400 btn btn-info" @click="pickFile">select image for {{id}}</button>
+
         <input
           type="file"
           style="display: none"

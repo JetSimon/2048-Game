@@ -4,20 +4,83 @@
     <title>2048</title>
     <script src="https://unpkg.com/vue"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+      #change {
+        transform: translateX(-50%);
+        left: 50%;
+        display: block;
+        text-align: center;
+        opacity: 0;
+      }
+
+      @keyframes pop {
+        0% {
+          bottom: -50%;
+          top: 0;
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+          bottom: -50%;
+          top: 0;
+        }
+        100% {
+          top: -50%;
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+
+      #change.popped {
+        animation-name: pop;
+        animation-duration: 0.75s;
+      }
+
+    </style>
   </head>
   
-  <body class="bg-gray-100">
+  <body class="bg-gradient-to-t from-purple-900 to-gray-900">
     <!-- include scripts -->
-    <div class="my-5 text-center mx-auto "><h1 class="text-5xl">2048</h1></div>
-    
-    <canvas class="mx-auto" id="canvas" width="500" height="500"></canvas>
+  <div class="flex justify-center mt-5 mb-5">
+    <div class="grid grid-cos-1 grid-rows-auto md:flex justify-around ">
+      <div>
+        <div class="text-center mx-auto "><h1 class="select-none font-bold tracking-widest text-8xl text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-red-600">2048</h1></div>
+        <div class="text-center mx-auto "><h1 class="select-none tracking-widest italic font-semibold text-gray-100 text-2xl">endgame</h1></div>      
+      </div>
+      <div class="flex flex-wrap mt-5">
+        <div class="text-center px-8 py-4 rounded-md ml-5 flex-1 bg-opacity-30 bg-black">
+          <label class="text-white text-lg font-medium uppercase opacity-50">Score</label>
+          <div class="relative">
+            <summary id="score" class="text-2xl font-bold text-white">0</summary>
+            <span id="change" class="transform invis text-gray-200 absolute font-bold text-xl">+0</span>
+          </div>
+        </div>
+        <div class="text-center px-8 py-4 rounded-md ml-5 flex-1 bg-opacity-30 bg-black">
+          <label class="text-white text-lg font-medium uppercase opacity-50">Best</label>
+          <summary id="best" class="text-2xl font-bold text-white">0</summary>
+        </div>
+        <div class="w-full mt-5 ml-5 flex justify-end">
+          <button id="restart" class="px-8 py-2 rounded-lg bg-opacity-20 bg-black text-gray-300 font-medium">Restart</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+    <div class="mt-6 bg-opacity-30 bg-black mx-auto py-16 w-3/4 lg:w-1/2 shadow-lg rounded-xl">
+      <canvas class="w-3/4 md:w-auto mx-auto rounded-sm" id="canvas" width="500" height="500"></canvas>
+    </div>
 
-    <div id="app" class="pt-32 flex w-2/3 mx-auto items-center">
-        <div class="grid gap-5 grid-cols-4 grid-rows-2" v-for="n in 8" :key="n">
-            <image-picker :id=n*2></image-picker>
+    <p class="select-none mx-auto italic font-semibold tracking-wide text-center mt-8 text-2xl text-opacity-70 text-white">use your arrow keys or swipe on your phone to play</p>
+
+    <p class="select-none mx-auto font-semibold tracking-wide text-center mt-16 text-5xl text-white">customize your tiles<br><br>∴</p>
+
+    <div id="app" class="pt-16 flex w-2/3 mx-auto items-center grid gap-5 grid-cols-2 lg:grid-cols-4 grid-rows-auto">
+        <div class="" v-for="n in 12" :key="n">
+            <image-picker :id=2**n></image-picker>
         </div>
     </div>
+
+    <p class="text-xl text-white text-center mx-auto font-semibold tracking-widest my-10">BY <a class="hover:text-yellow-400" href="http://jetsimon.com/">JET</a> AND <a class="hover:text-yellow-400" href="https://bizar.re/">ALEX</a></p>
 
     <script src="vue/imagePicker.js"></script>
     <script src="game/utils.js"></script>

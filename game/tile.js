@@ -1,5 +1,8 @@
 const TILE_SPACING = 0.95
 const WHITESPACE = 1 - TILE_SPACING
+const INITIAL_SIZE = 0.5;
+const POP_DURATION = 100
+
 
 class Tile {
     
@@ -16,7 +19,8 @@ class Tile {
         this.y = null
         this.destX = null
         this.destY = null
-        this.callback = null;
+
+        this.sizeMul = INITIAL_SIZE;
     }
 
     updateImage(imageDict) {
@@ -26,33 +30,48 @@ class Tile {
     setPos(x, y) {
         this.x = x
         this.y = y
+        this.originX = x
+        this.originY = y
     }
 
-    setDest(x, y, callback) {
+    move(x, y, speed) {
+      console.log("moving", this.val, x, y)
         this.destX = x;
         this.destY = y;
-        this.callback = callback;
+        this.speed = speed;
+        this.movementStart = new Date().getTime()
+    }
+
+    isMoving() {
+      return this.destX != null && this.destY != null
+    }
+
+    stop() {
+      this.destX = null
+      this.destY = null
+    }
+
+    change(val) {
+      this.val = val
+      this.sizeMul = 0.5
+    }
+
+    isFinishedMoving() {
+      const {speed, movementStart} = {...this}
+      const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
+      const percentageComplete = (100/speed*timeDiff)/100
+
+      return percentageComplete == 1
     }
     
-
     tick() {
-        if (this.destX != null) {
-            this.x = lerp(this.x, this.destX, 0.1)
-        }
+        if (this.isMoving()) {
+          const {destX, destY, speed, x, y, originX, originY, movementStart} = {...this}
+          const timeDiff = Math.min(speed, new Date().getTime() - movementStart)
+          const percentageComplete = (100/speed*timeDiff)/100 // number w/ range 0 -> 1 which shows how far anim should be
 
-        if (this.destY != null) {
-            this.y = lerp(this.y, this.destY, 0.1)
-        }
-
-        let canBecome = Math.abs(this.x - this.destX) + Math.abs(this.y - this.destY) < 0.1
-
-        if (canBecome) {
-            this.x = this.destX
-            this.y = this.destY
-            this.destX = null
-            this.destY = null
-            //console.log("CALL ME BACK")
-            this.callback()
+          this.x = originX - (originX - destX)*percentageComplete
+          this.y = originY - (originY - destY)*percentageComplete
         }
     }
 
@@ -61,25 +80,32 @@ class Tile {
             this.sideLength = canvas.width / gridSize
         }
 
-        const sideLength = this.sideLength
+        this.sizeMul = Math.min(1, this.sizeMul)
+        if(this.sizeMul < 1) {
+          this.sizeMul += 0.1;
+        }
+        this.sizeMul = Math.min(1, this.sizeMul)
 
-        let x = this.x * sideLength + sideLength * WHITESPACE / 2 
-        let y = this.y * sideLength + sideLength * WHITESPACE / 2
+        const sideLength = this.sideLength;
+        const spacing = (sideLength * WHITESPACE / 2) + (sideLength - this.sizeMul * sideLength) / 2
+
+        let x = this.x * sideLength + spacing
+        let y = this.y * sideLength + spacing
 
         ctx.drawImage(this.image,
-            this.image.width/2,this.image.height/2,
-            sideLength, sideLength,   
-            x, y,     // Place the result at 0, 0 in the canvas,
-            sideLength * TILE_SPACING, sideLength * TILE_SPACING); // With as width / height: 100 * 100 (scale)
+            0,0,
+            this.image.width, this.image.height,   
+            x, y,     // Place the result at x,y in the canvas,
+            sideLength * TILE_SPACING * this.sizeMul, sideLength * TILE_SPACING * this.sizeMul); // With as width / height: 100 * 100 (scale)
 
         ctx.font = `${sideLength * 0.5}px monospace`
         ctx.fillStyle = `white`
         ctx.textAlign = "center"
-        ctx.fillText(this.val.toString(), x + sideLength/2, y  + sideLength/1.75)
+
+        if(this.sizeMul >= 1) ctx.fillText(this.val, x + sideLength/2, y  + sideLength/1.75)
     }
 
-    canCombineWith(tile)
-    {
-        return this.val == tile.val
+    toString() {
+      return this.val
     }
 }

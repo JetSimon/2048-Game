@@ -15,7 +15,8 @@
   
     // add input handler forward
     document.body.addEventListener('keydown', (event) => { event.preventDefault(); container.processInput(event.key.toLowerCase()) })
-    document.body.addEventListener('touchstart', (_) => { event.preventDefault(); container.processInput(' ') })
+    handle.addEventListener('touchstart', (e) => { container.processTouchInputDown(e) })
+    handle.addEventListener('touchend', (e) => { container.processTouchInputUp(e) })
   
     // start game
     await container.start()

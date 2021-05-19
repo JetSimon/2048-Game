@@ -7,6 +7,8 @@ class GameContainer {
       this.speed = speed
       this.debug = debug
       this.game = new Game("game", this, 4)
+      this.touchX = null
+      this.touchY = null
       document.body.addEventListener('click', this.game.updateImageDict(), true); 
       document.getElementById("restart").addEventListener('click', () => {this.game.reset()}); 
     }
@@ -68,6 +70,31 @@ class GameContainer {
   
       // process input
       this.game.processInput(key)
+    }
+
+    processTouchInputDown(e) { 
+      this.touchX = e.changedTouches[0].clientX
+      this.touchY = e.changedTouches[0].clientY
+      //console.log(this.touchX, this.touchY)
+    }
+
+    processTouchInputUp(e) { 
+      const endX = e.changedTouches[0].clientX
+      const endY = e.changedTouches[0].clientY
+
+      const dx = endX - this.touchX 
+      const dy = endY - this.touchY
+
+      const hor = Math.abs(dx) > Math.abs(dy)
+
+      if(hor) {
+        this.game.processInput(dx > 0 ? "arrowright" : "arrowleft")
+      }else { 
+        this.game.processInput(dy > 0 ? "arrowdown" : "arrowup")
+      }
+
+      console.log(dx,dy)
+
     }
   
   }

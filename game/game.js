@@ -111,6 +111,7 @@ class Game {
      }
 
     shift(dX, dY) {
+      let moved = false
       const cloned = this.grid.map(arr => arr.slice())
 
       for (let y = 0; y < this.grid.length; y++) {
@@ -141,6 +142,7 @@ class Game {
             const adjacent = cloned[destY + dY][destX + dX]
 
             if (canCombineWith(tile, adjacent)) {
+              moved = true
               // now we will attempt merge
               adjacent.queuedVal = adjacent.val * 2
               adjacent.queuedRef = tile
@@ -151,16 +153,21 @@ class Game {
             }
           }
           
-          //if (destX != x || destY != y) {
+            if (destX != x || destY != y) {
+              moved = true
+            }
             tile.move(destX, destY, TILE_ANIMATION_DELAY)
             cloned[posY][posX] = null
             cloned[destY][destX] = tile
-          //}
+         
         }
       }
 
-      this.locked = true
-      setTimeout(() => this.addTile(), 250)
+      this.locked = moved
+      if(moved) {
+        setTimeout(() => this.addTile(), 250)
+      }
+      
     }
 
     addTile() {

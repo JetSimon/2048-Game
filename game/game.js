@@ -12,6 +12,7 @@ class Game {
         this.ghosts = []
         this.locked = false
         this.score = 0
+        this.bestScore = 0
         this.gridSize = gridSize //Replace this once we allow user to enter custom grid size
 
         this.updateImageDict()
@@ -94,13 +95,19 @@ class Game {
 
       if (score > 0) {
         this.score += score
-
+        document.getElementById('score').innerText = this.score
         document.getElementById('score').innerText = this.score
         const change = document.getElementById('change');
         change.innerText = `+${score}`
         change.classList.remove('popped')
         void change.offsetWidth
         change.classList.add('popped')
+
+        if(this.score > this.bestScore)
+        {
+          this.bestScore = this.score
+          document.getElementById('best').innerText = this.bestScore
+        }
       }
     }
 
